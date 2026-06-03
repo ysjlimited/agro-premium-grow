@@ -28,11 +28,19 @@ export function FeedEstimator() {
     const profit = revenue - totalCost;
     const margin = revenue ? (profit / revenue) * 100 : 0;
 
-    return { expectedKg, feedPerBird, totalFeedKg, totalFeedTonnes, revenue, totalCost, profit, margin };
+    return {
+      expectedKg,
+      feedPerBird,
+      totalFeedKg,
+      totalFeedTonnes,
+      revenue,
+      totalCost,
+      profit,
+      margin,
+    };
   }, [batch, age, pricePerKg, chickCost, feedPriceKg]);
 
-  const naira = (n: number) =>
-    "₦" + Math.round(n).toLocaleString();
+  const naira = (n: number) => "₦" + Math.round(n).toLocaleString();
 
   return (
     <div className="rounded-3xl border border-border bg-card p-6 lg:p-10 shadow-elegant">
@@ -48,19 +56,58 @@ export function FeedEstimator() {
 
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-5">
-          <Field label="Batch size (birds)" value={batch} setValue={setBatch} min={50} max={20000} step={50} />
-          <Field label="Target age (days)" value={age} setValue={setAge} min={28} max={56} step={1} />
-          <Field label="Live weight selling price (₦/kg)" value={pricePerKg} setValue={setPricePerKg} min={1000} max={8000} step={50} />
-          <Field label="Day-old chick cost (₦/bird)" value={chickCost} setValue={setChickCost} min={500} max={3000} step={50} />
-          <Field label="Feed price (₦/kg)" value={feedPriceKg} setValue={setFeedPriceKg} min={300} max={2000} step={25} />
+          <Field
+            label="Batch size (birds)"
+            value={batch}
+            setValue={setBatch}
+            min={50}
+            max={20000}
+            step={50}
+          />
+          <Field
+            label="Target age (days)"
+            value={age}
+            setValue={setAge}
+            min={28}
+            max={56}
+            step={1}
+          />
+          <Field
+            label="Live weight selling price (₦/kg)"
+            value={pricePerKg}
+            setValue={setPricePerKg}
+            min={1000}
+            max={8000}
+            step={50}
+          />
+          <Field
+            label="Day-old chick cost (₦/bird)"
+            value={chickCost}
+            setValue={setChickCost}
+            min={500}
+            max={3000}
+            step={50}
+          />
+          <Field
+            label="Feed price (₦/kg)"
+            value={feedPriceKg}
+            setValue={setFeedPriceKg}
+            min={300}
+            max={2000}
+            step={25}
+          />
         </div>
 
         <div className="rounded-2xl bg-gradient-to-br from-primary-deep to-primary text-primary-foreground p-8 space-y-5">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] opacity-80">
-            <Leaf size={14}/> Projection
+            <Leaf size={14} /> Projection
           </div>
           <Result k="Expected live weight / bird" v={`${stats.expectedKg.toFixed(2)} kg`} />
-          <Result k="Total feed required" v={`${stats.totalFeedKg.toLocaleString(undefined, { maximumFractionDigits: 0 })} kg`} sub={`${stats.totalFeedTonnes.toFixed(2)} tonnes`} />
+          <Result
+            k="Total feed required"
+            v={`${stats.totalFeedKg.toLocaleString(undefined, { maximumFractionDigits: 0 })} kg`}
+            sub={`${stats.totalFeedTonnes.toFixed(2)} tonnes`}
+          />
           <Result k="Projected revenue" v={naira(stats.revenue)} />
           <Result k="Total production cost" v={naira(stats.totalCost)} />
           <div className="border-t border-white/20 pt-4">
@@ -76,7 +123,21 @@ export function FeedEstimator() {
   );
 }
 
-function Field({ label, value, setValue, min, max, step }: { label: string; value: number; setValue: (n: number) => void; min: number; max: number; step: number }) {
+function Field({
+  label,
+  value,
+  setValue,
+  min,
+  max,
+  step,
+}: {
+  label: string;
+  value: number;
+  setValue: (n: number) => void;
+  min: number;
+  max: number;
+  step: number;
+}) {
   return (
     <label className="block">
       <div className="flex justify-between items-baseline mb-2">
@@ -105,7 +166,17 @@ function Field({ label, value, setValue, min, max, step }: { label: string; valu
   );
 }
 
-function Result({ k, v, sub, highlight }: { k: string; v: string; sub?: string; highlight?: boolean }) {
+function Result({
+  k,
+  v,
+  sub,
+  highlight,
+}: {
+  k: string;
+  v: string;
+  sub?: string;
+  highlight?: boolean;
+}) {
   return (
     <div className="flex items-baseline justify-between gap-4">
       <span className="text-sm opacity-90">{k}</span>

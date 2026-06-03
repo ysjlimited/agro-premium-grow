@@ -2,7 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { Mail, MapPin, Phone, MessageCircle, Clock, Facebook, Instagram, Send, ArrowRight, Loader2 } from "lucide-react";
+import {
+  Mail,
+  MapPin,
+  Phone,
+  MessageCircle,
+  Clock,
+  Facebook,
+  Instagram,
+  Send,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { PageBanner } from "@/components/PageBanner";
 import { submitContact } from "@/lib/forms.functions";
@@ -12,9 +23,16 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact YSJ Limited Broiler Farm — Ibadan, Nigeria" },
-      { name: "description", content: "Get in touch with YSJ Limited Broiler Farm. Phone, WhatsApp, email, address and Google Maps directions to our Akobo Ibadan facility." },
+      {
+        name: "description",
+        content:
+          "Get in touch with YSJ Limited Broiler Farm. Phone, WhatsApp, email, address and Google Maps directions to our Akobo Ibadan facility.",
+      },
       { property: "og:title", content: "Contact YSJ Limited Broiler Farm" },
-      { property: "og:description", content: "Reach our team in Akobo, Ibadan — phone, WhatsApp, email, map." },
+      {
+        property: "og:description",
+        content: "Reach our team in Akobo, Ibadan — phone, WhatsApp, email, map.",
+      },
       { property: "og:url", content: "/contact" },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
@@ -44,7 +62,9 @@ function Contact() {
     const r = schema.safeParse(data);
     if (!r.success) {
       const errs: Record<string, string> = {};
-      r.error.issues.forEach((i) => { if (i.path[0]) errs[String(i.path[0])] = i.message; });
+      r.error.issues.forEach((i) => {
+        if (i.path[0]) errs[String(i.path[0])] = i.message;
+      });
       setErrors(errs);
       return;
     }
@@ -77,7 +97,9 @@ function Contact() {
           {/* Form */}
           <div className="lg:col-span-7 reveal rounded-3xl border border-border bg-card p-8 lg:p-10 shadow-elegant">
             <h2 className="text-2xl font-bold">Send us a message</h2>
-            <p className="mt-1 text-sm text-muted-foreground">We'll reply within one business day.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              We'll reply within one business day.
+            </p>
             <form onSubmit={onSubmit} className="mt-7 grid sm:grid-cols-2 gap-5">
               <Input name="name" label="Full name" error={errors.name} />
               <Input name="email" label="Email" type="email" error={errors.email} />
@@ -90,18 +112,32 @@ function Contact() {
                   rows={5}
                   className={`mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none focus:border-primary-deep ${errors.message ? "border-destructive" : "border-border"}`}
                 />
-                {errors.message && <p className="mt-1 text-xs text-destructive">{errors.message}</p>}
+                {errors.message && (
+                  <p className="mt-1 text-xs text-destructive">{errors.message}</p>
+                )}
               </div>
               <div className="sm:col-span-2 flex flex-wrap justify-between items-center gap-4">
                 {sent ? (
-                  <p className="text-sm text-primary-deep">Thanks — your message has been sent. We'll be in touch shortly.</p>
-                ) : <span/>}
+                  <p className="text-sm text-primary-deep">
+                    Thanks — your message has been sent. We'll be in touch shortly.
+                  </p>
+                ) : (
+                  <span />
+                )}
                 <button
                   type="submit"
                   disabled={submitting}
                   className="inline-flex items-center gap-2 rounded-full bg-primary-deep px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary transition disabled:opacity-60"
                 >
-                  {submitting ? <><Loader2 size={16} className="animate-spin"/> Sending…</> : <>Send message <ArrowRight size={16}/></>}
+                  {submitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Sending…
+                    </>
+                  ) : (
+                    <>
+                      Send message <ArrowRight size={16} />
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -111,20 +147,36 @@ function Contact() {
           <aside className="lg:col-span-5 space-y-4">
             {[
               { icon: Phone, t: "Phone", v: "09131201229", href: "tel:+2349131201229" },
-              { icon: MessageCircle, t: "WhatsApp", v: "09131201229", href: "https://wa.me/2349131201229" },
-              { icon: Mail, t: "Email", v: "ysjlimitedbroilerfarm@gmail.com", href: "mailto:ysjlimitedbroilerfarm@gmail.com" },
+              {
+                icon: MessageCircle,
+                t: "WhatsApp",
+                v: "09131201229",
+                href: "https://wa.me/2349131201229",
+              },
+              {
+                icon: Mail,
+                t: "Email",
+                v: "ysjlimitedbroilerfarm@gmail.com",
+                href: "mailto:ysjlimitedbroilerfarm@gmail.com",
+              },
               { icon: MapPin, t: "Address", v: "Road 5, Lamona, Oluhunda Akobo, Ibadan, Nigeria" },
               { icon: Clock, t: "Business hours", v: "Mon – Sat · 8:00 AM – 6:00 PM" },
             ].map((c) => {
               const I = c.icon;
-              const Wrap: any = c.href ? "a" : "div";
+              const Wrap = (c.href ? "a" : "div") as React.ElementType;
               return (
-                <Wrap key={c.t} href={c.href} className="reveal flex items-start gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-elegant transition">
+                <Wrap
+                  key={c.t}
+                  href={c.href}
+                  className="reveal flex items-start gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-elegant transition"
+                >
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary-deep text-primary-foreground">
-                    <I size={18}/>
+                    <I size={18} />
                   </span>
                   <div>
-                    <div className="text-xs uppercase tracking-widest text-muted-foreground">{c.t}</div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                      {c.t}
+                    </div>
                     <div className="mt-1 font-semibold break-all">{c.v}</div>
                   </div>
                 </Wrap>
@@ -132,7 +184,9 @@ function Contact() {
             })}
 
             <div className="reveal rounded-2xl border border-border bg-card p-5">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Follow us</div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                Follow us
+              </div>
               <div className="flex gap-2">
                 <Social icon={Facebook} href="#" />
                 <Social icon={Instagram} href="#" />
@@ -163,9 +217,14 @@ function Contact() {
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary-deep to-primary text-primary-foreground p-10 lg:p-16 text-center">
             <h2 className="text-3xl lg:text-5xl font-bold">Become a wholesale partner</h2>
-            <p className="mt-4 max-w-xl mx-auto text-primary-foreground/80 text-lg">Talk to our team about repeat-order contracts for broilers, feeds and crops.</p>
-            <a href="https://wa.me/2349131201229" className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold text-gold-foreground px-7 py-3.5 text-sm font-bold hover:opacity-90">
-              <MessageCircle size={16}/> Start a WhatsApp chat
+            <p className="mt-4 max-w-xl mx-auto text-primary-foreground/80 text-lg">
+              Talk to our team about repeat-order contracts for broilers, feeds and crops.
+            </p>
+            <a
+              href="https://wa.me/2349131201229"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold text-gold-foreground px-7 py-3.5 text-sm font-bold hover:opacity-90"
+            >
+              <MessageCircle size={16} /> Start a WhatsApp chat
             </a>
           </div>
         </div>
@@ -175,10 +234,24 @@ function Contact() {
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return <label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">{children}</label>;
+  return (
+    <label className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">
+      {children}
+    </label>
+  );
 }
 
-function Input({ name, label, type = "text", error }: { name: string; label: string; type?: string; error?: string }) {
+function Input({
+  name,
+  label,
+  type = "text",
+  error,
+}: {
+  name: string;
+  label: string;
+  type?: string;
+  error?: string;
+}) {
   return (
     <div>
       <Label>{label}</Label>
@@ -194,8 +267,11 @@ function Input({ name, label, type = "text", error }: { name: string; label: str
 
 function Social({ icon: Icon, href }: { icon: typeof Facebook; href: string }) {
   return (
-    <a href={href} className="grid h-10 w-10 place-items-center rounded-full border border-border bg-background hover:bg-secondary transition">
-      <Icon size={16}/>
+    <a
+      href={href}
+      className="grid h-10 w-10 place-items-center rounded-full border border-border bg-background hover:bg-secondary transition"
+    >
+      <Icon size={16} />
     </a>
   );
 }

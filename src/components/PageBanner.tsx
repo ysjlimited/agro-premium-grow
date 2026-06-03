@@ -27,9 +27,7 @@ export function PageBanner({ eyebrow, title, subtitle }: Props) {
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-5 text-lg text-primary-foreground/85 max-w-2xl">
-            {subtitle}
-          </p>
+          <p className="mt-5 text-lg text-primary-foreground/85 max-w-2xl">{subtitle}</p>
         )}
       </div>
     </section>

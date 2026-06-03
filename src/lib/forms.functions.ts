@@ -72,10 +72,7 @@ export const submitContact = createServerFn({ method: "POST" })
         <p style="white-space:pre-wrap">${escapeHtml(data.message)}</p>
       </div>
     `;
-    const emailResult = await sendOwnerNotification(
-      `Contact form: ${data.subject}`,
-      html,
-    );
+    const emailResult = await sendOwnerNotification(`Contact form: ${data.subject}`, html);
     return { ok: true, emailed: emailResult.sent };
   });
 

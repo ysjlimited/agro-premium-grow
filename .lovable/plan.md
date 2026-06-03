@@ -1,4 +1,3 @@
-
 ## Phase A — Real email delivery + public API endpoints + UI polish
 
 **Prerequisite (one-time, you do this):** click the **Set up email domain** button below. You'll be guided through adding 2 DNS records to a domain you own (e.g. `ysjpoultry.com`). Once verified, emails to `ysjlimitedbroilerfarm@gmail.com` will be delivered for real (no more `mailto:`).
@@ -20,6 +19,7 @@ After that's set up, I'll:
 A separate, password-protected area at `/admin` (under TanStack `_authenticated` layout). Built incrementally — I'll ship it in three sub-phases so you can review after each.
 
 ### B1 — Auth + roles foundation
+
 - Email/password sign-in + Google sign-in (`/auth` page).
 - `profiles` table (display name, avatar, role).
 - `user_roles` table with enum `admin | md | supervisor | officer` and a `has_role()` security-definer function.
@@ -28,11 +28,13 @@ A separate, password-protected area at `/admin` (under TanStack `_authenticated`
 - `/admin` shell: sidebar nav, role-aware menu items, sign-out.
 
 ### B2 — Submissions + daily logs + weekly compiler
+
 - **Submissions inbox** — paginated list of `contact_submissions` and `newsletter_subscriptions` with search/export to CSV. (Admin / MD only.)
 - **Daily field log** — officers submit per-shift entries: house ID, mortality, feed consumed kg, water L, weight sample, notes. RLS so officers see only their own; supervisors+ see all.
 - **Weekly compiler** — supervisors aggregate a week's daily logs into one row (totals, averages, FCR, deltas vs target). One-click "Generate AI strategy insight" calls Lovable AI Gateway (`google/gemini-2.5-flash`) and stores the markdown insight + supervisor comment alongside the compiled row.
 
 ### B3 — AI advisor + admin tools
+
 - **AI advisor chat** — sidebar chat against the farm's recent metrics; persists conversations per user.
 - **Staff roster** (admin/MD only) — list users, change role, reset password (email magic link), deactivate account.
 - **System diagnostics** (admin only) — connection health check, last 50 email send-log rows, recent error log, link to download a bootstrap SQL script.

@@ -14,7 +14,12 @@ export function Preloader() {
         gone ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
-      <img src={logo.url} alt="" className="h-16 w-16 animate-spin-once" style={{ animationIterationCount: "infinite", animationDuration: "1.6s" }}/>
+      <img
+        src={logo.url}
+        alt=""
+        className="h-16 w-16 animate-spin-once"
+        style={{ animationIterationCount: "infinite", animationDuration: "1.6s" }}
+      />
     </div>
   );
 }

@@ -24,7 +24,10 @@ function NotFoundComponent() {
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6">
-          <Link to="/" className="inline-flex items-center justify-center rounded-full bg-primary-deep px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center rounded-full bg-primary-deep px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary"
+          >
             Go home
           </Link>
         </div>
@@ -47,12 +50,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-muted-foreground">Something went wrong. Try refreshing.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
             className="rounded-full bg-primary-deep px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary"
           >
             Try again
           </button>
-          <a href="/" className="rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold">Go home</a>
+          <a
+            href="/"
+            className="rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold"
+          >
+            Go home
+          </a>
         </div>
       </div>
     </div>
@@ -65,13 +76,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "YSJ Limited Broiler Farm — Premium Poultry & Agro, Ibadan" },
-      { name: "description", content: "Commercial broiler production, poultry brooding, animal feeds, cashew and maize. Hygienic, professionally managed agro supply from Ibadan, Nigeria since 2016." },
+      {
+        name: "description",
+        content:
+          "Commercial broiler production, poultry brooding, animal feeds, cashew and maize. Hygienic, professionally managed agro supply from Ibadan, Nigeria since 2016.",
+      },
       { name: "author", content: "YSJ Limited Broiler Farm" },
       { name: "theme-color", content: "#1f4d2c" },
       { property: "og:site_name", content: "YSJ Limited Broiler Farm" },
       { property: "og:type", content: "website" },
       { property: "og:title", content: "YSJ Limited Broiler Farm" },
-      { property: "og:description", content: "Premium broiler production, brooding, feeds & cash crops in Ibadan, Nigeria." },
+      {
+        property: "og:description",
+        content: "Premium broiler production, brooding, feeds & cash crops in Ibadan, Nigeria.",
+      },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [

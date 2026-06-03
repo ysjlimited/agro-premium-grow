@@ -58,7 +58,7 @@
   --popover-foreground: oklch(0.22 0.018 250);
 
   /* Deep forest emerald */
-  --primary: oklch(0.40 0.10 152);
+  --primary: oklch(0.4 0.1 152);
   --primary-foreground: oklch(0.98 0.008 90);
   --primary-deep: oklch(0.28 0.08 152);
 
@@ -78,9 +78,9 @@
   --destructive: oklch(0.58 0.22 27);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --border: oklch(0.90 0.012 100);
-  --input: oklch(0.90 0.012 100);
-  --ring: oklch(0.40 0.10 152);
+  --border: oklch(0.9 0.012 100);
+  --input: oklch(0.9 0.012 100);
+  --ring: oklch(0.4 0.1 152);
 }
 
 .dark {
@@ -91,16 +91,16 @@
   --popover: oklch(0.22 0.03 150);
   --popover-foreground: oklch(0.96 0.01 90);
   --primary: oklch(0.78 0.14 78);
-  --primary-foreground: oklch(0.20 0.02 60);
+  --primary-foreground: oklch(0.2 0.02 60);
   --primary-deep: oklch(0.55 0.12 150);
   --secondary: oklch(0.28 0.03 150);
   --secondary-foreground: oklch(0.96 0.01 90);
   --muted: oklch(0.28 0.03 150);
-  --muted-foreground: oklch(0.70 0.02 90);
+  --muted-foreground: oklch(0.7 0.02 90);
   --accent: oklch(0.32 0.05 150);
   --accent-foreground: oklch(0.96 0.01 90);
   --gold: oklch(0.78 0.14 78);
-  --gold-foreground: oklch(0.20 0.02 60);
+  --gold-foreground: oklch(0.2 0.02 60);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.78 0.14 78);
@@ -120,11 +120,17 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
-  .font-mono, .tabular {
+  .font-mono,
+  .tabular {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
@@ -143,27 +149,40 @@
     color: transparent;
   }
   .shadow-elegant {
-    box-shadow: 0 1px 0 oklch(0 0 0 / 0.04), 0 20px 50px -25px color-mix(in oklab, var(--primary-deep) 35%, transparent);
+    box-shadow:
+      0 1px 0 oklch(0 0 0 / 0.04),
+      0 20px 50px -25px color-mix(in oklab, var(--primary-deep) 35%, transparent);
   }
   .reveal {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
   }
   .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
   @keyframes spin-once {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
   .animate-spin-once {
     animation: spin-once 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   }
   @keyframes float-y {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
   }
   .animate-float {
     animation: float-y 4s ease-in-out infinite;

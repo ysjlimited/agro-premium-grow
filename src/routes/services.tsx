@@ -14,9 +14,16 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services & Products — YSJ Limited Broiler Farm" },
-      { name: "description", content: "Commercial broilers, poultry brooding, bulk distribution, animal feeds, cashew and maize. Includes our free broiler feed & profit estimator." },
+      {
+        name: "description",
+        content:
+          "Commercial broilers, poultry brooding, bulk distribution, animal feeds, cashew and maize. Includes our free broiler feed & profit estimator.",
+      },
       { property: "og:title", content: "Services & Products — YSJ Limited Broiler Farm" },
-      { property: "og:description", content: "Premium poultry, feeds and cash crops with a built-in feed & profit estimator." },
+      {
+        property: "og:description",
+        content: "Premium poultry, feeds and cash crops with a built-in feed & profit estimator.",
+      },
       { property: "og:image", content: banner.url },
       { property: "og:url", content: "/services" },
     ],
@@ -42,14 +49,20 @@ const products: Product[] = [
     cat: "poultry",
     img: banner.url,
     title: "Commercial Broiler Production",
-    blurb: "Healthy, well-finished broilers raised to commercial weight under strict veterinary oversight.",
+    blurb:
+      "Healthy, well-finished broilers raised to commercial weight under strict veterinary oversight.",
     specs: [
       { k: "Live weight", v: "1.8 – 2.6 kg" },
       { k: "Market age", v: "38 – 45 days" },
       { k: "Pricing", v: "From ₦3,500 / kg" },
     ],
     features: ["Hygienically raised", "Vaccinated flocks", "Bulk and retail options"],
-    process: ["Source quality day-old chicks", "Brooding & grow-out", "Pre-sale health check", "Delivery / pickup"],
+    process: [
+      "Source quality day-old chicks",
+      "Brooding & grow-out",
+      "Pre-sale health check",
+      "Delivery / pickup",
+    ],
   },
   {
     cat: "poultry",
@@ -62,7 +75,12 @@ const products: Product[] = [
       { k: "Pricing", v: "On request" },
     ],
     features: ["Climate-controlled houses", "24/7 monitoring", "Optimised feed conversion"],
-    process: ["Pre-arrival sanitation", "Reception & warming", "Vaccination schedule", "Transfer-ready chicks"],
+    process: [
+      "Pre-arrival sanitation",
+      "Reception & warming",
+      "Vaccination schedule",
+      "Transfer-ready chicks",
+    ],
   },
   {
     cat: "poultry",
@@ -75,7 +93,12 @@ const products: Product[] = [
       { k: "Lead time", v: "24 – 72 hours" },
     ],
     features: ["Wholesale pricing", "Cold-chain options", "Repeat-order contracts"],
-    process: ["Order placement", "Quote & confirmation", "Quality check & packaging", "Logistics & delivery"],
+    process: [
+      "Order placement",
+      "Quote & confirmation",
+      "Quality check & packaging",
+      "Logistics & delivery",
+    ],
   },
   {
     cat: "feeds",
@@ -154,7 +177,9 @@ function Services() {
       {/* INTRO */}
       <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8 text-center reveal">
-          <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">Explore</span>
+          <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">
+            Explore
+          </span>
           <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold">Browse our offerings</h2>
         </div>
 
@@ -173,7 +198,7 @@ function Services() {
                     : "bg-card text-charcoal/80 border-border hover:bg-secondary"
                 }`}
               >
-                <I size={14}/> {t.label}
+                <I size={14} /> {t.label}
               </button>
             );
           })}
@@ -184,9 +209,17 @@ function Services() {
       <section className="pb-24">
         <div className="mx-auto max-w-7xl px-5 lg:px-8 grid lg:grid-cols-2 gap-8">
           {filtered.map((p) => (
-            <article key={p.title} className="reveal group overflow-hidden rounded-3xl border border-border bg-card hover:shadow-elegant transition">
+            <article
+              key={p.title}
+              className="reveal group overflow-hidden rounded-3xl border border-border bg-card hover:shadow-elegant transition"
+            >
               <div className="relative h-64 overflow-hidden">
-                <img src={p.img} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-110 transition duration-700"/>
+                <img
+                  src={p.img}
+                  alt={p.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover group-hover:scale-110 transition duration-700"
+                />
               </div>
               <div className="p-7 space-y-5">
                 <div>
@@ -197,29 +230,41 @@ function Services() {
                 <dl className="grid sm:grid-cols-3 gap-3">
                   {p.specs.map((s) => (
                     <div key={s.k} className="rounded-xl bg-secondary/50 p-3">
-                      <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">{s.k}</dt>
+                      <dt className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                        {s.k}
+                      </dt>
                       <dd className="mt-1 font-mono text-sm font-bold text-primary-deep">{s.v}</dd>
                     </div>
                   ))}
                 </dl>
 
                 <div>
-                  <div className="text-xs uppercase tracking-widest font-semibold text-primary-deep mb-2">Features</div>
+                  <div className="text-xs uppercase tracking-widest font-semibold text-primary-deep mb-2">
+                    Features
+                  </div>
                   <ul className="grid sm:grid-cols-2 gap-1.5">
                     {p.features.map((f) => (
                       <li key={f} className="flex items-center gap-2 text-sm">
-                        <Check size={14} className="text-gold"/> {f}
+                        <Check size={14} className="text-gold" /> {f}
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div>
-                  <div className="text-xs uppercase tracking-widest font-semibold text-primary-deep mb-2">Process</div>
+                  <div className="text-xs uppercase tracking-widest font-semibold text-primary-deep mb-2">
+                    Process
+                  </div>
                   <ol className="flex flex-wrap gap-2">
                     {p.process.map((step, i) => (
-                      <li key={step} className="rounded-full border border-border bg-background px-3 py-1 text-xs">
-                        <span className="font-mono text-gold mr-1">{String(i + 1).padStart(2, "0")}</span>{step}
+                      <li
+                        key={step}
+                        className="rounded-full border border-border bg-background px-3 py-1 text-xs"
+                      >
+                        <span className="font-mono text-gold mr-1">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        {step}
                       </li>
                     ))}
                   </ol>
@@ -234,9 +279,15 @@ function Services() {
       <section className="pb-28">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <div className="mb-10 reveal text-center max-w-2xl mx-auto">
-            <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">Interactive tool</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold">Plan your next batch</h2>
-            <p className="mt-3 text-muted-foreground">Estimate feed requirements, expected weight and projected profit.</p>
+            <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">
+              Interactive tool
+            </span>
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold">
+              Plan your next batch
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Estimate feed requirements, expected weight and projected profit.
+            </p>
           </div>
           <div className="reveal">
             <FeedEstimator />
