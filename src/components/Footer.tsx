@@ -64,6 +64,7 @@ export function Footer() {
             <li><Link to="/about" className="hover:text-primary-deep">About</Link></li>
             <li><Link to="/services" className="hover:text-primary-deep">Services & Products</Link></li>
             <li><Link to="/contact" className="hover:text-primary-deep">Contact</Link></li>
+            <li><Link to={"/admin" as any} className="font-semibold text-primary-deep hover:underline">Admin Dashboard →</Link></li>
           </ul>
         </div>
 

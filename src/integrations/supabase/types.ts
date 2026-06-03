@@ -14,6 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          title?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -44,6 +97,66 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_logs: {
+        Row: {
+          birds_harvested: number
+          created_at: string
+          expenses: number
+          feed_bags: number
+          house_id: string
+          id: string
+          log_date: string
+          mortality: number
+          notes: string | null
+          officer_id: string
+          opening_stock: number
+          sales: number
+          shift: string
+          supervisor_comment: string | null
+          updated_at: string
+          water_liters: number
+          weight_sample_g: number | null
+        }
+        Insert: {
+          birds_harvested?: number
+          created_at?: string
+          expenses?: number
+          feed_bags?: number
+          house_id: string
+          id?: string
+          log_date?: string
+          mortality?: number
+          notes?: string | null
+          officer_id: string
+          opening_stock?: number
+          sales?: number
+          shift?: string
+          supervisor_comment?: string | null
+          updated_at?: string
+          water_liters?: number
+          weight_sample_g?: number | null
+        }
+        Update: {
+          birds_harvested?: number
+          created_at?: string
+          expenses?: number
+          feed_bags?: number
+          house_id?: string
+          id?: string
+          log_date?: string
+          mortality?: number
+          notes?: string | null
+          officer_id?: string
+          opening_stock?: number
+          sales?: number
+          shift?: string
+          supervisor_comment?: string | null
+          updated_at?: string
+          water_liters?: number
+          weight_sample_g?: number | null
+        }
+        Relationships: []
+      }
       newsletter_subscriptions: {
         Row: {
           created_at: string
@@ -62,15 +175,127 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_summaries: {
+        Row: {
+          ai_insight: string | null
+          avg_weight_g: number | null
+          compiled_by: string
+          created_at: string
+          fcr: number | null
+          house_id: string | null
+          id: string
+          supervisor_comment: string | null
+          total_expenses: number
+          total_feed_bags: number
+          total_harvested: number
+          total_mortality: number
+          total_sales: number
+          updated_at: string
+          week_end: string
+          week_start: string
+        }
+        Insert: {
+          ai_insight?: string | null
+          avg_weight_g?: number | null
+          compiled_by: string
+          created_at?: string
+          fcr?: number | null
+          house_id?: string | null
+          id?: string
+          supervisor_comment?: string | null
+          total_expenses?: number
+          total_feed_bags?: number
+          total_harvested?: number
+          total_mortality?: number
+          total_sales?: number
+          updated_at?: string
+          week_end: string
+          week_start: string
+        }
+        Update: {
+          ai_insight?: string | null
+          avg_weight_g?: number | null
+          compiled_by?: string
+          created_at?: string
+          fcr?: number | null
+          house_id?: string | null
+          id?: string
+          supervisor_comment?: string | null
+          total_expenses?: number
+          total_feed_bags?: number
+          total_harvested?: number
+          total_mortality?: number
+          total_sales?: number
+          updated_at?: string
+          week_end?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin_or_md: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "md" | "supervisor" | "officer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -197,6 +422,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "md", "supervisor", "officer"],
+    },
   },
 } as const
