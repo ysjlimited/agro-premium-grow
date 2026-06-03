@@ -178,7 +178,6 @@ function Home() {
               { img: banner.url, icon: Egg, t: "Commercial broilers", d: "Healthy, well-finished birds for traders and processors." },
               { img: brooding.url, icon: ShieldCheck, t: "Poultry brooding", d: "Specialised brooding for first-week survival rates." },
               { img: chicks.url, icon: Truck, t: "Bulk distribution", d: "Reliable wholesale logistics across Oyo State." },
-              { img: maize.url, icon: Wheat, t: "Animal feeds", d: "Nutritionally balanced feed for poultry production." },
               { img: cashew.url, icon: Leaf, t: "Cashew", d: "Cash crop production from our 10-acre facility." },
               { img: maize.url, icon: Wheat, t: "Maize", d: "Premium grain for feed and food markets." },
             ].map((s, i) => {
