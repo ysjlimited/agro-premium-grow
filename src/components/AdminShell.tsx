@@ -53,7 +53,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             const active = n.end ? path === n.to : path.startsWith(n.to);
             return (
               <Link
-                key={n.to} to={n.to} onClick={() => setOpen(false)}
+                key={n.to} to={n.to as any} onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${active ? "bg-emerald-500/15 text-emerald-300" : "text-slate-300 hover:bg-white/5"}`}
               >
                 <Icon size={16}/> {n.label}
