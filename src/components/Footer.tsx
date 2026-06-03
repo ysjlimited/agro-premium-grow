@@ -1,11 +1,39 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, Phone, Send } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { toast } from "sonner";
 import { RotatingLogo } from "./RotatingLogo";
+import { subscribeNewsletter } from "@/lib/forms.functions";
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const subscribe = useServerFn(subscribeNewsletter);
+
+  const onSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const r = z.string().trim().email().safeParse(email);
+    if (!r.success) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setBusy(true);
+    try {
+      await subscribe({ data: { email: r.data } });
+      setSent(true);
+      setEmail("");
+      toast.success("Subscribed — thanks! We'll be in touch.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not subscribe. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <footer className="mt-24 border-t border-border bg-gradient-to-b from-background to-secondary/60">
       <div className="mx-auto max-w-7xl px-5 lg:px-8 py-16 grid gap-12 lg:grid-cols-12">
@@ -52,7 +80,7 @@ export function Footer() {
           <h4 className="text-sm font-semibold uppercase tracking-widest text-primary-deep mb-4">Newsletter</h4>
           <p className="text-sm text-muted-foreground mb-3">Farm updates, seasonal offers and bulk-supply availability.</p>
           <form
-            onSubmit={(e) => { e.preventDefault(); if (email) { setSent(true); setEmail(""); } }}
+            onSubmit={onSubscribe}
             className="flex items-center rounded-full border border-border bg-card pl-4 pr-1 py-1"
           >
             <input
@@ -63,8 +91,12 @@ export function Footer() {
               placeholder="you@example.com"
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
-            <button className="rounded-full bg-primary-deep px-4 py-2 text-xs font-semibold text-primary-foreground">
-              Subscribe
+            <button
+              type="submit"
+              disabled={busy}
+              className="rounded-full bg-primary-deep px-4 py-2 text-xs font-semibold text-primary-foreground disabled:opacity-60 inline-flex items-center gap-1.5"
+            >
+              {busy ? <><Loader2 size={12} className="animate-spin"/> …</> : "Subscribe"}
             </button>
           </form>
           {sent && <p className="mt-2 text-xs text-primary-deep">Thanks — we'll be in touch.</p>}
@@ -80,3 +112,4 @@ export function Footer() {
     </footer>
   );
 }
+

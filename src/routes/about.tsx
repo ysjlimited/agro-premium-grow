@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ShieldCheck, Stethoscope, Building2, Lock, Award, Target, Compass } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
+import { PageBanner } from "@/components/PageBanner";
 import banner from "@/assets/banner.jpg.asset.json";
 import brooding from "@/assets/brooding.jpg.asset.json";
 import madam from "@/assets/madam-md.png.asset.json";
@@ -24,14 +25,20 @@ export const Route = createFileRoute("/about")({
 function About() {
   return (
     <SiteShell>
+      <PageBanner
+        eyebrow="About us"
+        title="A professional agro enterprise rooted in trust & quality"
+        subtitle="Founded in 2016 in Ibadan — a 10-acre commercial poultry and agro facility serving traders, processors and households."
+      />
+
       {/* INTRO */}
-      <section className="py-20 lg:py-28">
+      <section className="py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-5 lg:px-8 grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6 reveal">
-            <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">About us</span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              A professional agro enterprise rooted in <span className="text-gradient-emerald">trust & quality</span>
-            </h1>
+            <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">Our story</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+              From a single brooding house to a <span className="text-gradient-emerald">10-acre facility</span>
+            </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
               YSJ Limited Broiler Farm — also operating as YSJ Poultry & Agro-Farms — was
               founded in 2016 in Ibadan. From a single brooding house, we've grown into a
@@ -45,6 +52,7 @@ function About() {
           </div>
         </div>
       </section>
+
 
       {/* MISSION VISION */}
       <section className="py-20 bg-secondary/40">
