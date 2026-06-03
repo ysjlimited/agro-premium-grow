@@ -23,7 +23,7 @@ function DailyLogsPage() {
   const [showForm, setShowForm] = useState(false);
 
   const mut = useMutation({
-    mutationFn: (payload: Parameters<typeof createFn>[0]["data"]) => createFn({ data: payload }),
+    mutationFn: (payload: any) => createFn({ data: payload }),
     onSuccess: () => {
       toast.success("Daily log saved.");
       qc.invalidateQueries({ queryKey: ["daily-logs"] });

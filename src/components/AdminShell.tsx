@@ -9,14 +9,15 @@ import { useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyRoles } from "@/lib/admin.functions";
 
-const nav = [
+type NavItem = { to: string; label: string; icon: any; end?: boolean; role?: string[] };
+const nav: NavItem[] = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, end: true },
   { to: "/admin/daily-logs", label: "Daily Logs", icon: ClipboardList },
   { to: "/admin/weekly", label: "Weekly Compiler", icon: CalendarRange },
   { to: "/admin/submissions", label: "Submissions", icon: Inbox, role: ["admin", "md", "supervisor"] },
   { to: "/admin/advisor", label: "AI Advisor", icon: Sparkles },
   { to: "/admin/staff", label: "Staff Roster", icon: Users, role: ["admin", "md"] },
-] as const;
+];
 
 export function AdminShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
@@ -48,7 +49,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         </div>
         <nav className="p-3 space-y-0.5">
           {nav.filter((n) => allowed(n.role)).map((n) => {
-            const Icon = n.icon;
+            const Icon = n.icon as any;
             const active = n.end ? path === n.to : path.startsWith(n.to);
             return (
               <Link
