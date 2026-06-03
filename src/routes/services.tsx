@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Egg, Wheat, Leaf, Truck, Check, ShieldCheck } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { FeedEstimator } from "@/components/FeedEstimator";
+import { PageBanner } from "@/components/PageBanner";
 import banner from "@/assets/banner.jpg.asset.json";
 import brooding from "@/assets/brooding.jpg.asset.json";
 import chicks from "@/assets/chicks.jpg.asset.json";
@@ -144,15 +145,17 @@ function Services() {
 
   return (
     <SiteShell>
+      <PageBanner
+        eyebrow="Catalogue"
+        title="Services & products"
+        subtitle="Poultry, feeds and crops — produced and supplied to commercial standards. Filter by category or use our feed & profit estimator below."
+      />
+
       {/* INTRO */}
-      <section className="py-20 lg:py-24">
+      <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8 text-center reveal">
-          <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">Catalogue</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold">Services & products</h1>
-          <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Poultry, feeds and crops — produced and supplied to commercial standards.
-            Filter by category or use our feed & profit estimator below.
-          </p>
+          <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">Explore</span>
+          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold">Browse our offerings</h2>
         </div>
 
         {/* TABS */}
