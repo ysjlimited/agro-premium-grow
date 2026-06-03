@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { Mail, MapPin, Phone, MessageCircle, Clock, Facebook, Instagram, Send, ArrowRight } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle, Clock, Facebook, Instagram, Send, ArrowRight, Loader2 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
+import { PageBanner } from "@/components/PageBanner";
+import { submitContact } from "@/lib/forms.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,11 +32,14 @@ const schema = z.object({
 
 function Contact() {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const send = useServerFn(submitContact);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const data = Object.fromEntries(fd) as Record<string, string>;
     const r = schema.safeParse(data);
     if (!r.success) {
@@ -42,27 +49,30 @@ function Contact() {
       return;
     }
     setErrors({});
-    const body = `Name: ${r.data.name}%0D%0AEmail: ${r.data.email}%0D%0APhone: ${r.data.phone ?? ""}%0D%0A%0D%0A${encodeURIComponent(r.data.message)}`;
-    window.location.href = `mailto:ysjlimitedbroilerfarm@gmail.com?subject=${encodeURIComponent(r.data.subject)}&body=${body}`;
-    setSent(true);
-    e.currentTarget.reset();
+    setSubmitting(true);
+    try {
+      await send({ data: { ...r.data, phone: r.data.phone ?? "" } });
+      setSent(true);
+      form.reset();
+      toast.success("Message sent — we'll get back to you within one business day.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again or WhatsApp us.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <SiteShell>
-      {/* INTRO */}
-      <section className="py-20 lg:py-24">
-        <div className="mx-auto max-w-7xl px-5 lg:px-8 text-center reveal">
-          <span className="text-xs uppercase tracking-[0.22em] text-primary-deep font-semibold">Get in touch</span>
-          <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold">Let's talk poultry & agro</h1>
-          <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Bulk orders, brooding services, feed supply or general enquiries — our team is ready to help.
-          </p>
-        </div>
-      </section>
+      <PageBanner
+        eyebrow="Get in touch"
+        title="Let's talk poultry & agro"
+        subtitle="Bulk orders, brooding services, feed supply or general enquiries — our team is ready to help."
+      />
 
       {/* GRID */}
-      <section className="pb-20">
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8 grid lg:grid-cols-12 gap-8">
           {/* Form */}
           <div className="lg:col-span-7 reveal rounded-3xl border border-border bg-card p-8 lg:p-10 shadow-elegant">
@@ -84,10 +94,14 @@ function Contact() {
               </div>
               <div className="sm:col-span-2 flex flex-wrap justify-between items-center gap-4">
                 {sent ? (
-                  <p className="text-sm text-primary-deep">Thanks — your email client should now open. We'll be in touch.</p>
+                  <p className="text-sm text-primary-deep">Thanks — your message has been sent. We'll be in touch shortly.</p>
                 ) : <span/>}
-                <button className="inline-flex items-center gap-2 rounded-full bg-primary-deep px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary transition">
-                  Send message <ArrowRight size={16}/>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="inline-flex items-center gap-2 rounded-full bg-primary-deep px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary transition disabled:opacity-60"
+                >
+                  {submitting ? <><Loader2 size={16} className="animate-spin"/> Sending…</> : <>Send message <ArrowRight size={16}/></>}
                 </button>
               </div>
             </form>
