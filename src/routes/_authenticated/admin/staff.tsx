@@ -106,68 +106,6 @@ function StaffPage() {
                 roleMut={roleMut} updateMut={updateMut} resetMut={resetMut} deleteMut={deleteMut}
                 confirm={confirm}/>
             ))}
-              <>
-                <tr key={u.id} className="border-t border-white/5 align-top">
-                  <td className="px-4 py-3">
-                    <div className="font-medium">{u.display_name ?? "—"}</div>
-                    <div className="text-[10px] text-slate-500 font-mono">{u.user_id.slice(0, 8)}…</div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {u.roles.length === 0 && <span className="text-xs text-slate-500">none</span>}
-                      {u.roles.map((r: string) => (
-                        <span key={r} className="text-[10px] font-semibold uppercase tracking-widest px-2 py-1 rounded bg-emerald-500/15 text-emerald-300">{r}</span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1.5">
-                      {ROLES.map((r) => {
-                        const has = u.roles.includes(r);
-                        return (
-                          <button key={r}
-                            onClick={() => roleMut.mutate({ user_id: u.user_id, role: r, action: has ? "remove" : "add" })}
-                            className={`text-[10px] px-2 py-1 rounded border ${has ? "border-rose-500/30 text-rose-300 hover:bg-rose-500/10" : "border-white/10 text-slate-300 hover:bg-white/5"}`}>
-                            {has ? `− ${r}` : `+ ${r}`}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="inline-flex gap-1">
-                      <button onClick={() => setEditingId(editingId === u.user_id ? null : u.user_id)}
-                        title="Edit name/email"
-                        className="p-1.5 rounded hover:bg-white/5 text-slate-300"><Pencil size={14}/></button>
-                      <button onClick={() => setResettingId(resettingId === u.user_id ? null : u.user_id)}
-                        title="Reset password"
-                        className="p-1.5 rounded hover:bg-white/5 text-amber-300"><KeyRound size={14}/></button>
-                      <button
-                        onClick={() => confirm.confirm({
-                          title: "Delete this staff account?",
-                          description: <>This permanently removes <strong>{u.display_name ?? "this user"}</strong> and revokes their access. This cannot be undone.</>,
-                          onConfirm: () => deleteMut.mutate(u.user_id),
-                        })}
-                        className="p-1.5 rounded hover:bg-rose-500/10 text-rose-300"><Trash2 size={14}/></button>
-                    </div>
-                  </td>
-                </tr>
-                {editingId === u.user_id && (
-                  <tr className="bg-white/[0.02]"><td colSpan={4} className="px-4 py-3">
-                    <EditStaffInline initial={u} busy={updateMut.isPending}
-                      onCancel={() => setEditingId(null)}
-                      onSubmit={(patch) => updateMut.mutate({ user_id: u.user_id, ...patch })}/>
-                  </td></tr>
-                )}
-                {resettingId === u.user_id && (
-                  <tr className="bg-white/[0.02]"><td colSpan={4} className="px-4 py-3">
-                    <ResetPasswordInline busy={resetMut.isPending}
-                      onCancel={() => setResettingId(null)}
-                      onSubmit={(pw) => resetMut.mutate({ user_id: u.user_id, new_password: pw })}/>
-                  </td></tr>
-                )}
-              </>
-            ))}
           </tbody>
         </table>
       </div>
