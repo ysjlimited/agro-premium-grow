@@ -100,6 +100,12 @@ function StaffPage() {
           <tbody>
             {isLoading && <tr><td colSpan={4} className="p-6 text-center text-slate-500">Loading…</td></tr>}
             {data?.map((u: any) => (
+              <StaffRow key={u.id} u={u}
+                editingId={editingId} setEditingId={setEditingId}
+                resettingId={resettingId} setResettingId={setResettingId}
+                roleMut={roleMut} updateMut={updateMut} resetMut={resetMut} deleteMut={deleteMut}
+                confirm={confirm}/>
+            ))}
               <>
                 <tr key={u.id} className="border-t border-white/5 align-top">
                   <td className="px-4 py-3">
