@@ -19,8 +19,10 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminWeeklyRouteImport } from './routes/_authenticated/admin/weekly'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin/submissions'
+import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin/stock'
 import { Route as AuthenticatedAdminStaffRouteImport } from './routes/_authenticated/admin/staff'
 import { Route as AuthenticatedAdminDailyLogsRouteImport } from './routes/_authenticated/admin/daily-logs'
+import { Route as AuthenticatedAdminBatchesRouteImport } from './routes/_authenticated/admin/batches'
 import { Route as AuthenticatedAdminAdvisorRouteImport } from './routes/_authenticated/admin/advisor'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -74,6 +76,11 @@ const AuthenticatedAdminSubmissionsRoute =
     path: '/submissions',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminStockRoute = AuthenticatedAdminStockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminStaffRoute = AuthenticatedAdminStaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -83,6 +90,12 @@ const AuthenticatedAdminDailyLogsRoute =
   AuthenticatedAdminDailyLogsRouteImport.update({
     id: '/daily-logs',
     path: '/daily-logs',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminBatchesRoute =
+  AuthenticatedAdminBatchesRouteImport.update({
+    id: '/batches',
+    path: '/batches',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminAdvisorRoute =
@@ -100,8 +113,10 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/admin/advisor': typeof AuthenticatedAdminAdvisorRoute
+  '/admin/batches': typeof AuthenticatedAdminBatchesRoute
   '/admin/daily-logs': typeof AuthenticatedAdminDailyLogsRoute
   '/admin/staff': typeof AuthenticatedAdminStaffRoute
+  '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/weekly': typeof AuthenticatedAdminWeeklyRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -113,8 +128,10 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/services': typeof ServicesRoute
   '/admin/advisor': typeof AuthenticatedAdminAdvisorRoute
+  '/admin/batches': typeof AuthenticatedAdminBatchesRoute
   '/admin/daily-logs': typeof AuthenticatedAdminDailyLogsRoute
   '/admin/staff': typeof AuthenticatedAdminStaffRoute
+  '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/weekly': typeof AuthenticatedAdminWeeklyRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -129,8 +146,10 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/admin/advisor': typeof AuthenticatedAdminAdvisorRoute
+  '/_authenticated/admin/batches': typeof AuthenticatedAdminBatchesRoute
   '/_authenticated/admin/daily-logs': typeof AuthenticatedAdminDailyLogsRoute
   '/_authenticated/admin/staff': typeof AuthenticatedAdminStaffRoute
+  '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/weekly': typeof AuthenticatedAdminWeeklyRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -145,8 +164,10 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin'
     | '/admin/advisor'
+    | '/admin/batches'
     | '/admin/daily-logs'
     | '/admin/staff'
+    | '/admin/stock'
     | '/admin/submissions'
     | '/admin/weekly'
     | '/admin/'
@@ -158,8 +179,10 @@ export interface FileRouteTypes {
     | '/contact'
     | '/services'
     | '/admin/advisor'
+    | '/admin/batches'
     | '/admin/daily-logs'
     | '/admin/staff'
+    | '/admin/stock'
     | '/admin/submissions'
     | '/admin/weekly'
     | '/admin'
@@ -173,8 +196,10 @@ export interface FileRouteTypes {
     | '/services'
     | '/_authenticated/admin'
     | '/_authenticated/admin/advisor'
+    | '/_authenticated/admin/batches'
     | '/_authenticated/admin/daily-logs'
     | '/_authenticated/admin/staff'
+    | '/_authenticated/admin/stock'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/weekly'
     | '/_authenticated/admin/'
@@ -261,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSubmissionsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/stock': {
+      id: '/_authenticated/admin/stock'
+      path: '/stock'
+      fullPath: '/admin/stock'
+      preLoaderRoute: typeof AuthenticatedAdminStockRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/staff': {
       id: '/_authenticated/admin/staff'
       path: '/staff'
@@ -275,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDailyLogsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/batches': {
+      id: '/_authenticated/admin/batches'
+      path: '/batches'
+      fullPath: '/admin/batches'
+      preLoaderRoute: typeof AuthenticatedAdminBatchesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/advisor': {
       id: '/_authenticated/admin/advisor'
       path: '/advisor'
@@ -287,8 +326,10 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminAdvisorRoute: typeof AuthenticatedAdminAdvisorRoute
+  AuthenticatedAdminBatchesRoute: typeof AuthenticatedAdminBatchesRoute
   AuthenticatedAdminDailyLogsRoute: typeof AuthenticatedAdminDailyLogsRoute
   AuthenticatedAdminStaffRoute: typeof AuthenticatedAdminStaffRoute
+  AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminWeeklyRoute: typeof AuthenticatedAdminWeeklyRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -297,8 +338,10 @@ interface AuthenticatedAdminRouteRouteChildren {
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
     AuthenticatedAdminAdvisorRoute: AuthenticatedAdminAdvisorRoute,
+    AuthenticatedAdminBatchesRoute: AuthenticatedAdminBatchesRoute,
     AuthenticatedAdminDailyLogsRoute: AuthenticatedAdminDailyLogsRoute,
     AuthenticatedAdminStaffRoute: AuthenticatedAdminStaffRoute,
+    AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,
     AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
     AuthenticatedAdminWeeklyRoute: AuthenticatedAdminWeeklyRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -331,13 +374,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -3,20 +3,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   LayoutDashboard, ClipboardList, CalendarRange, Inbox,
-  Users, Sparkles, LogOut, Menu, X, Bird,
+  Users, Sparkles, LogOut, Menu, X, Bird, Layers, Package,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyRoles } from "@/lib/admin.functions";
 
 type NavItem = { to: string; label: string; icon: any; end?: boolean; role?: string[] };
 const nav: NavItem[] = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, end: true },
+  { to: "/admin/batches", label: "Batches", icon: Layers },
+  { to: "/admin/stock", label: "Stock", icon: Package },
   { to: "/admin/daily-logs", label: "Daily Logs", icon: ClipboardList },
   { to: "/admin/weekly", label: "Weekly Compiler", icon: CalendarRange },
   { to: "/admin/submissions", label: "Submissions", icon: Inbox, role: ["admin", "md", "supervisor"] },
   { to: "/admin/advisor", label: "AI Advisor", icon: Sparkles },
-  { to: "/admin/staff", label: "Staff Roster", icon: Users, role: ["admin", "md"] },
+  { to: "/admin/staff", label: "Staff Roster", icon: Users, role: ["admin"] },
 ];
 
 export function AdminShell({ children }: { children: ReactNode }) {
@@ -27,12 +29,23 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const roles = data?.roles ?? [];
   const [open, setOpen] = useState(false);
 
+  // Force re-login each visit: if no session-marker for this browser tab, sign out & redirect.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!sessionStorage.getItem("ysj-active-session")) {
+      supabase.auth.signOut().finally(() => navigate({ to: "/auth" }));
+    }
+  }, [navigate]);
+
   const allowed = (r?: readonly string[]) => !r || r.some((x) => roles.includes(x));
 
   const signOut = async () => {
+    sessionStorage.removeItem("ysj-active-session");
     await supabase.auth.signOut();
     navigate({ to: "/auth" });
   };
+
+
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-slate-100 flex">

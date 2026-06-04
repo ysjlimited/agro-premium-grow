@@ -345,3 +345,224 @@ export const aiAdvise = createServerFn({ method: "POST" })
     const j = await res.json();
     return { content: j.choices?.[0]?.message?.content ?? "" };
   });
+
+// ============================================================
+// BATCHES
+// ============================================================
+const batchSchema = z.object({
+  name: z.string().min(1).max(120),
+  breed: z.string().max(80).optional().or(z.literal("")),
+  start_date: z.string().min(8),
+  bird_count: z.number().int().min(0),
+  status: z.enum(["active", "harvested", "closed"]).default("active"),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+});
+
+export const listBatches = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("batches").select("*").order("start_date", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const createBatch = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => batchSchema.parse(i))
+  .handler(async ({ data, context }) => {
+    const { error, data: row } = await context.supabase
+      .from("batches")
+      .insert({ ...data, breed: data.breed || null, notes: data.notes || null, created_by: context.userId })
+      .select().single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const updateBatch = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({ id: z.string().uuid(), patch: batchSchema.partial() }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("batches").update(data.patch).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteBatch = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("batches").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ============================================================
+// STOCK ITEMS
+// ============================================================
+const stockSchema = z.object({
+  name: z.string().min(1).max(120),
+  category: z.enum(["feed", "medication", "equipment", "supplies", "other"]).default("feed"),
+  quantity: z.number().min(0),
+  unit: z.string().min(1).max(30),
+  reorder_level: z.number().min(0).default(0),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+});
+
+export const listStock = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("stock_items").select("*").order("name");
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const createStock = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => stockSchema.parse(i))
+  .handler(async ({ data, context }) => {
+    const { error, data: row } = await context.supabase
+      .from("stock_items")
+      .insert({ ...data, notes: data.notes || null, created_by: context.userId })
+      .select().single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const updateStock = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({ id: z.string().uuid(), patch: stockSchema.partial() }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("stock_items").update(data.patch).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteStock = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("stock_items").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ============================================================
+// DAILY LOG: update, delete, signed photo URL
+// ============================================================
+export const updateDailyLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({
+      id: z.string().uuid(),
+      patch: dailyLogSchema.partial().extend({
+        photo_url: z.string().max(500).nullable().optional(),
+        batch_id: z.string().uuid().nullable().optional(),
+      }),
+    }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("daily_logs").update(data.patch).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteDailyLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("daily_logs").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const signFarmPhoto = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ path: z.string().min(1).max(500) }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { data: s, error } = await context.supabase.storage
+      .from("farm-photos").createSignedUrl(data.path, 60 * 60);
+    if (error) throw new Error(error.message);
+    return { url: s.signedUrl };
+  });
+
+// ============================================================
+// STAFF ADMIN — only Main Admin can manage staff
+// ============================================================
+async function assertMainAdmin(supabase: any, userId: string) {
+  const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId).eq("role", "admin").maybeSingle();
+  if (!data) throw new Error("Only the Main Admin can manage staff.");
+}
+
+export const adminCreateStaff = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({
+      email: z.string().email().max(255),
+      password: z.string().min(8).max(72),
+      display_name: z.string().min(1).max(120),
+      role: z.enum(["supervisor", "officer"]).default("officer"),
+    }).parse(i))
+  .handler(async ({ data, context }) => {
+    await assertMainAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+      email: data.email,
+      password: data.password,
+      email_confirm: true,
+      user_metadata: { display_name: data.display_name },
+    });
+    if (error) throw new Error(error.message);
+    // Trigger creates default 'officer' role. Add chosen role if different.
+    if (data.role !== "officer") {
+      await supabaseAdmin.from("user_roles").insert({ user_id: created.user!.id, role: data.role });
+    }
+    return { ok: true, user_id: created.user!.id };
+  });
+
+export const adminResetStaffPassword = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({ user_id: z.string().uuid(), new_password: z.string().min(8).max(72) }).parse(i))
+  .handler(async ({ data, context }) => {
+    await assertMainAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(data.user_id, { password: data.new_password });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminUpdateStaff = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({
+      user_id: z.string().uuid(),
+      display_name: z.string().min(1).max(120).optional(),
+      email: z.string().email().max(255).optional(),
+    }).parse(i))
+  .handler(async ({ data, context }) => {
+    await assertMainAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (data.email) {
+      const { error } = await supabaseAdmin.auth.admin.updateUserById(data.user_id, { email: data.email });
+      if (error) throw new Error(error.message);
+    }
+    if (data.display_name) {
+      await supabaseAdmin.from("profiles").update({ display_name: data.display_name }).eq("user_id", data.user_id);
+    }
+    return { ok: true };
+  });
+
+export const adminDeleteStaff = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ user_id: z.string().uuid() }).parse(i))
+  .handler(async ({ data, context }) => {
+    await assertMainAdmin(context.supabase, context.userId);
+    if (data.user_id === context.userId) throw new Error("You cannot delete your own account.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(data.user_id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

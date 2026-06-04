@@ -67,6 +67,45 @@ export type Database = {
           },
         ]
       }
+      batches: {
+        Row: {
+          bird_count: number
+          breed: string | null
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          notes: string | null
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          bird_count?: number
+          breed?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          notes?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          bird_count?: number
+          breed?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -99,6 +138,7 @@ export type Database = {
       }
       daily_logs: {
         Row: {
+          batch_id: string | null
           birds_harvested: number
           created_at: string
           expenses: number
@@ -110,6 +150,7 @@ export type Database = {
           notes: string | null
           officer_id: string
           opening_stock: number
+          photo_url: string | null
           sales: number
           shift: string
           supervisor_comment: string | null
@@ -118,6 +159,7 @@ export type Database = {
           weight_sample_g: number | null
         }
         Insert: {
+          batch_id?: string | null
           birds_harvested?: number
           created_at?: string
           expenses?: number
@@ -129,6 +171,7 @@ export type Database = {
           notes?: string | null
           officer_id: string
           opening_stock?: number
+          photo_url?: string | null
           sales?: number
           shift?: string
           supervisor_comment?: string | null
@@ -137,6 +180,7 @@ export type Database = {
           weight_sample_g?: number | null
         }
         Update: {
+          batch_id?: string | null
           birds_harvested?: number
           created_at?: string
           expenses?: number
@@ -148,6 +192,7 @@ export type Database = {
           notes?: string | null
           officer_id?: string
           opening_stock?: number
+          photo_url?: string | null
           sales?: number
           shift?: string
           supervisor_comment?: string | null
@@ -155,7 +200,15 @@ export type Database = {
           water_liters?: number
           weight_sample_g?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "daily_logs_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "batches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       newsletter_subscriptions: {
         Row: {
@@ -199,6 +252,45 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      stock_items: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          notes: string | null
+          quantity: number
+          reorder_level: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          notes?: string | null
+          quantity?: number
+          reorder_level?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          quantity?: number
+          reorder_level?: number
+          unit?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -293,6 +385,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin_or_md: { Args: { _user_id: string }; Returns: boolean }
+      is_main_admin_email: { Args: { _email: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "md" | "supervisor" | "officer"
