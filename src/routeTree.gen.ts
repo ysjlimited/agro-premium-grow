@@ -21,6 +21,7 @@ import { Route as AuthenticatedAdminWeeklyRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin/submissions'
 import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin/stock'
 import { Route as AuthenticatedAdminStaffRouteImport } from './routes/_authenticated/admin/staff'
+import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin/reports'
 import { Route as AuthenticatedAdminDailyLogsRouteImport } from './routes/_authenticated/admin/daily-logs'
 import { Route as AuthenticatedAdminBatchesRouteImport } from './routes/_authenticated/admin/batches'
 import { Route as AuthenticatedAdminAdvisorRouteImport } from './routes/_authenticated/admin/advisor'
@@ -86,6 +87,12 @@ const AuthenticatedAdminStaffRoute = AuthenticatedAdminStaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminReportsRoute =
+  AuthenticatedAdminReportsRouteImport.update({
+    id: '/reports',
+    path: '/reports',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminDailyLogsRoute =
   AuthenticatedAdminDailyLogsRouteImport.update({
     id: '/daily-logs',
@@ -115,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/admin/advisor': typeof AuthenticatedAdminAdvisorRoute
   '/admin/batches': typeof AuthenticatedAdminBatchesRoute
   '/admin/daily-logs': typeof AuthenticatedAdminDailyLogsRoute
+  '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/staff': typeof AuthenticatedAdminStaffRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
@@ -130,6 +138,7 @@ export interface FileRoutesByTo {
   '/admin/advisor': typeof AuthenticatedAdminAdvisorRoute
   '/admin/batches': typeof AuthenticatedAdminBatchesRoute
   '/admin/daily-logs': typeof AuthenticatedAdminDailyLogsRoute
+  '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/staff': typeof AuthenticatedAdminStaffRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
@@ -148,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/advisor': typeof AuthenticatedAdminAdvisorRoute
   '/_authenticated/admin/batches': typeof AuthenticatedAdminBatchesRoute
   '/_authenticated/admin/daily-logs': typeof AuthenticatedAdminDailyLogsRoute
+  '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/_authenticated/admin/staff': typeof AuthenticatedAdminStaffRoute
   '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/admin/advisor'
     | '/admin/batches'
     | '/admin/daily-logs'
+    | '/admin/reports'
     | '/admin/staff'
     | '/admin/stock'
     | '/admin/submissions'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/admin/advisor'
     | '/admin/batches'
     | '/admin/daily-logs'
+    | '/admin/reports'
     | '/admin/staff'
     | '/admin/stock'
     | '/admin/submissions'
@@ -198,6 +210,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/advisor'
     | '/_authenticated/admin/batches'
     | '/_authenticated/admin/daily-logs'
+    | '/_authenticated/admin/reports'
     | '/_authenticated/admin/staff'
     | '/_authenticated/admin/stock'
     | '/_authenticated/admin/submissions'
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminStaffRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/reports': {
+      id: '/_authenticated/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AuthenticatedAdminReportsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/daily-logs': {
       id: '/_authenticated/admin/daily-logs'
       path: '/daily-logs'
@@ -328,6 +348,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminAdvisorRoute: typeof AuthenticatedAdminAdvisorRoute
   AuthenticatedAdminBatchesRoute: typeof AuthenticatedAdminBatchesRoute
   AuthenticatedAdminDailyLogsRoute: typeof AuthenticatedAdminDailyLogsRoute
+  AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
   AuthenticatedAdminStaffRoute: typeof AuthenticatedAdminStaffRoute
   AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
@@ -340,6 +361,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminAdvisorRoute: AuthenticatedAdminAdvisorRoute,
     AuthenticatedAdminBatchesRoute: AuthenticatedAdminBatchesRoute,
     AuthenticatedAdminDailyLogsRoute: AuthenticatedAdminDailyLogsRoute,
+    AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
     AuthenticatedAdminStaffRoute: AuthenticatedAdminStaffRoute,
     AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,
     AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
