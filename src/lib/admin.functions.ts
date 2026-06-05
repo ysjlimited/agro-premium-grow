@@ -566,3 +566,94 @@ export const adminDeleteStaff = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// ============================================================
+// ARRIVALS — quick increments
+// ============================================================
+export const addStockArrival = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({ id: z.string().uuid(), delta: z.number().min(0.0001).max(1_000_000) }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { data: row, error: e1 } = await context.supabase
+      .from("stock_items").select("quantity").eq("id", data.id).single();
+    if (e1) throw new Error(e1.message);
+    const next = Number(row.quantity) + data.delta;
+    const { error } = await context.supabase.from("stock_items").update({ quantity: next }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, quantity: next };
+  });
+
+export const addBatchBirds = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({ id: z.string().uuid(), delta: z.number().int().min(1).max(1_000_000) }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { data: row, error: e1 } = await context.supabase
+      .from("batches").select("bird_count").eq("id", data.id).single();
+    if (e1) throw new Error(e1.message);
+    const next = Number(row.bird_count) + data.delta;
+    const { error } = await context.supabase.from("batches").update({ bird_count: next }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, bird_count: next };
+  });
+
+// ============================================================
+// REPORT — aggregate daily logs in a date range
+// ============================================================
+export const getReport = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z.object({
+      start: z.string().min(8),
+      end: z.string().min(8),
+      bucket: z.enum(["day", "week", "month"]).default("day"),
+    }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { data: rows, error } = await context.supabase
+      .from("daily_logs")
+      .select("log_date,house_id,opening_stock,mortality,birds_harvested,feed_bags,water_liters,expenses,sales,notes")
+      .gte("log_date", data.start)
+      .lte("log_date", data.end)
+      .order("log_date", { ascending: true });
+    if (error) throw new Error(error.message);
+    const r = rows ?? [];
+
+    const keyOf = (d: string) => {
+      if (data.bucket === "day") return d;
+      const dt = new Date(d);
+      if (data.bucket === "month") return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}`;
+      // week: ISO week starting Monday
+      const day = dt.getUTCDay() || 7;
+      dt.setUTCDate(dt.getUTCDate() - day + 1);
+      return dt.toISOString().slice(0, 10);
+    };
+
+    const groups = new Map<string, any>();
+    for (const x of r) {
+      const k = keyOf(x.log_date);
+      const g = groups.get(k) ?? { period: k, mortality: 0, harvested: 0, feed_bags: 0, water_liters: 0, expenses: 0, sales: 0, entries: 0 };
+      g.mortality += x.mortality ?? 0;
+      g.harvested += x.birds_harvested ?? 0;
+      g.feed_bags += Number(x.feed_bags ?? 0);
+      g.water_liters += Number(x.water_liters ?? 0);
+      g.expenses += Number(x.expenses ?? 0);
+      g.sales += Number(x.sales ?? 0);
+      g.entries += 1;
+      groups.set(k, g);
+    }
+    const periods = Array.from(groups.values()).sort((a, b) => a.period.localeCompare(b.period))
+      .map((g) => ({ ...g, profit: g.sales - g.expenses }));
+
+    const totals = periods.reduce(
+      (a, g) => ({
+        mortality: a.mortality + g.mortality, harvested: a.harvested + g.harvested,
+        feed_bags: a.feed_bags + g.feed_bags, water_liters: a.water_liters + g.water_liters,
+        expenses: a.expenses + g.expenses, sales: a.sales + g.sales, profit: a.profit + g.profit,
+        entries: a.entries + g.entries,
+      }),
+      { mortality: 0, harvested: 0, feed_bags: 0, water_liters: 0, expenses: 0, sales: 0, profit: 0, entries: 0 },
+    );
+
+    return { periods, totals, rows: r };
+  });
