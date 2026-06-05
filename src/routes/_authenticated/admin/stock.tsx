@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2, AlertTriangle } from "lucide-react";
-import { createStock, deleteStock, listStock, updateStock, getMyRoles } from "@/lib/admin.functions";
+import { Plus, Pencil, Trash2, Loader2, AlertTriangle, PackagePlus } from "lucide-react";
+import { createStock, deleteStock, listStock, updateStock, getMyRoles, addStockArrival } from "@/lib/admin.functions";
 import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/_authenticated/admin/stock")({
@@ -22,6 +22,7 @@ function StockPage() {
   const createFn = useServerFn(createStock);
   const updateFn = useServerFn(updateStock);
   const deleteFn = useServerFn(deleteStock);
+  const arriveFn = useServerFn(addStockArrival);
   const rolesFn = useServerFn(getMyRoles);
   const { data: rolesData } = useQuery({ queryKey: ["my-roles"], queryFn: () => rolesFn() });
   const isAdmin = (rolesData?.roles ?? []).includes("admin");
@@ -44,6 +45,11 @@ function StockPage() {
   const deleteMut = useMutation({
     mutationFn: (id: string) => deleteFn({ data: { id } }),
     onSuccess: () => { toast.success("Stock deleted"); qc.invalidateQueries({ queryKey: ["stock"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const arriveMut = useMutation({
+    mutationFn: (v: { id: string; delta: number }) => arriveFn({ data: v }),
+    onSuccess: () => { toast.success("Arrival recorded"); qc.invalidateQueries({ queryKey: ["stock"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -102,6 +108,11 @@ function StockPage() {
                   {isAdmin && (
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex gap-1">
+                        <button title="Record arrival / restock" onClick={() => {
+                          const v = prompt(`Add arrival quantity for "${s.name}" (in ${s.unit}):`, "0");
+                          const n = Number(v);
+                          if (v && !isNaN(n) && n > 0) arriveMut.mutate({ id: s.id, delta: n });
+                        }} className="p-1.5 rounded hover:bg-emerald-500/10 text-emerald-300"><PackagePlus size={14}/></button>
                         <button onClick={() => { setEditing(s); setCreating(false); }}
                           className="p-1.5 rounded hover:bg-white/5 text-slate-300"><Pencil size={14}/></button>
                         <button

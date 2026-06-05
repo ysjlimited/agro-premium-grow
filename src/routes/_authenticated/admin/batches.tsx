@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
-import { createBatch, deleteBatch, listBatches, updateBatch, getMyRoles } from "@/lib/admin.functions";
+import { Plus, Pencil, Trash2, Loader2, Bird as BirdIcon } from "lucide-react";
+import { createBatch, deleteBatch, listBatches, updateBatch, getMyRoles, addBatchBirds } from "@/lib/admin.functions";
 import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/_authenticated/admin/batches")({
@@ -22,6 +22,7 @@ function BatchesPage() {
   const createFn = useServerFn(createBatch);
   const updateFn = useServerFn(updateBatch);
   const deleteFn = useServerFn(deleteBatch);
+  const arriveFn = useServerFn(addBatchBirds);
   const rolesFn = useServerFn(getMyRoles);
   const { data: rolesData } = useQuery({ queryKey: ["my-roles"], queryFn: () => rolesFn() });
   const isAdmin = (rolesData?.roles ?? []).includes("admin");
@@ -44,6 +45,11 @@ function BatchesPage() {
   const deleteMut = useMutation({
     mutationFn: (id: string) => deleteFn({ data: { id } }),
     onSuccess: () => { toast.success("Batch deleted"); qc.invalidateQueries({ queryKey: ["batches"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const arriveMut = useMutation({
+    mutationFn: (v: { id: string; delta: number }) => arriveFn({ data: v }),
+    onSuccess: () => { toast.success("New birds added"); qc.invalidateQueries({ queryKey: ["batches"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -101,6 +107,11 @@ function BatchesPage() {
                 {isAdmin && (
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
+                      <button title="Add new birds (arrival)" onClick={() => {
+                        const v = prompt(`Add new birds arriving for "${b.name}":`, "0");
+                        const n = Number(v);
+                        if (v && !isNaN(n) && n > 0) arriveMut.mutate({ id: b.id, delta: Math.floor(n) });
+                      }} className="p-1.5 rounded hover:bg-emerald-500/10 text-emerald-300"><BirdIcon size={14}/></button>
                       <button onClick={() => { setEditing(b); setCreating(false); }}
                         className="p-1.5 rounded hover:bg-white/5 text-slate-300"><Pencil size={14}/></button>
                       <button
