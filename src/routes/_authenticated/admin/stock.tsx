@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2, AlertTriangle } from "lucide-react";
-import { createStock, deleteStock, listStock, updateStock, getMyRoles } from "@/lib/admin.functions";
+import { Plus, Pencil, Trash2, Loader2, AlertTriangle, PackagePlus } from "lucide-react";
+import { createStock, deleteStock, listStock, updateStock, getMyRoles, addStockArrival } from "@/lib/admin.functions";
 import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/_authenticated/admin/stock")({
