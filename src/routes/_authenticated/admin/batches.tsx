@@ -22,6 +22,7 @@ function BatchesPage() {
   const createFn = useServerFn(createBatch);
   const updateFn = useServerFn(updateBatch);
   const deleteFn = useServerFn(deleteBatch);
+  const arriveFn = useServerFn(addBatchBirds);
   const rolesFn = useServerFn(getMyRoles);
   const { data: rolesData } = useQuery({ queryKey: ["my-roles"], queryFn: () => rolesFn() });
   const isAdmin = (rolesData?.roles ?? []).includes("admin");
