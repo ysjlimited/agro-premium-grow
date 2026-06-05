@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
-import { createBatch, deleteBatch, listBatches, updateBatch, getMyRoles } from "@/lib/admin.functions";
+import { Plus, Pencil, Trash2, Loader2, BirdIcon } from "lucide-react";
+import { createBatch, deleteBatch, listBatches, updateBatch, getMyRoles, addBatchBirds } from "@/lib/admin.functions";
 import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/_authenticated/admin/batches")({
