@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   LayoutDashboard, ClipboardList, CalendarRange, Inbox,
-  Users, Sparkles, LogOut, Menu, X, Bird, Layers, Package,
+  Users, Sparkles, LogOut, Menu, X, Bird, Layers, Package, FileBarChart2,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,6 +15,7 @@ const nav: NavItem[] = [
   { to: "/admin/batches", label: "Batches", icon: Layers },
   { to: "/admin/stock", label: "Stock", icon: Package },
   { to: "/admin/daily-logs", label: "Daily Logs", icon: ClipboardList },
+  { to: "/admin/reports", label: "Reports", icon: FileBarChart2 },
   { to: "/admin/weekly", label: "Weekly Compiler", icon: CalendarRange },
   { to: "/admin/submissions", label: "Submissions", icon: Inbox, role: ["admin", "md", "supervisor"] },
   { to: "/admin/advisor", label: "AI Advisor", icon: Sparkles },
