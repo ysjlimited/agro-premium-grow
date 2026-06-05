@@ -47,6 +47,11 @@ function BatchesPage() {
     onSuccess: () => { toast.success("Batch deleted"); qc.invalidateQueries({ queryKey: ["batches"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
+  const arriveMut = useMutation({
+    mutationFn: (v: { id: string; delta: number }) => arriveFn({ data: v }),
+    onSuccess: () => { toast.success("New birds added"); qc.invalidateQueries({ queryKey: ["batches"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   return (
     <div className="space-y-5">
