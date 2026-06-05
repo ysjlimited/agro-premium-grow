@@ -107,6 +107,11 @@ function BatchesPage() {
                 {isAdmin && (
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
+                      <button title="Add new birds (arrival)" onClick={() => {
+                        const v = prompt(`Add new birds arriving for "${b.name}":`, "0");
+                        const n = Number(v);
+                        if (v && !isNaN(n) && n > 0) arriveMut.mutate({ id: b.id, delta: Math.floor(n) });
+                      }} className="p-1.5 rounded hover:bg-emerald-500/10 text-emerald-300"><BirdIcon size={14}/></button>
                       <button onClick={() => { setEditing(b); setCreating(false); }}
                         className="p-1.5 rounded hover:bg-white/5 text-slate-300"><Pencil size={14}/></button>
                       <button
