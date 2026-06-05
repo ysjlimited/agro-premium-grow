@@ -22,6 +22,7 @@ function StockPage() {
   const createFn = useServerFn(createStock);
   const updateFn = useServerFn(updateStock);
   const deleteFn = useServerFn(deleteStock);
+  const arriveFn = useServerFn(addStockArrival);
   const rolesFn = useServerFn(getMyRoles);
   const { data: rolesData } = useQuery({ queryKey: ["my-roles"], queryFn: () => rolesFn() });
   const isAdmin = (rolesData?.roles ?? []).includes("admin");
