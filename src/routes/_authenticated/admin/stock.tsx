@@ -47,6 +47,11 @@ function StockPage() {
     onSuccess: () => { toast.success("Stock deleted"); qc.invalidateQueries({ queryKey: ["stock"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
+  const arriveMut = useMutation({
+    mutationFn: (v: { id: string; delta: number }) => arriveFn({ data: v }),
+    onSuccess: () => { toast.success("Arrival recorded"); qc.invalidateQueries({ queryKey: ["stock"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   return (
     <div className="space-y-5">
