@@ -108,6 +108,11 @@ function StockPage() {
                   {isAdmin && (
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex gap-1">
+                        <button title="Record arrival / restock" onClick={() => {
+                          const v = prompt(`Add arrival quantity for "${s.name}" (in ${s.unit}):`, "0");
+                          const n = Number(v);
+                          if (v && !isNaN(n) && n > 0) arriveMut.mutate({ id: s.id, delta: n });
+                        }} className="p-1.5 rounded hover:bg-emerald-500/10 text-emerald-300"><PackagePlus size={14}/></button>
                         <button onClick={() => { setEditing(s); setCreating(false); }}
                           className="p-1.5 rounded hover:bg-white/5 text-slate-300"><Pencil size={14}/></button>
                         <button
