@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Truck, Leaf, Egg, Wheat, Star } from "lucide-react";
+import { ArrowRight, MessageCircle, ShieldCheck, Truck, Leaf, Egg, Wheat, Star } from "lucide-react";
+import { PageBanner } from "@/components/PageBanner";
 import { SiteShell } from "@/components/SiteShell";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import hero from "@/assets/hero.jpg.asset.json";
@@ -27,6 +28,11 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <SiteShell>
+      <PageBanner
+        eyebrow="YSJ Limited Broiler Farm"
+        title="Premium Poultry & Agro from Ibadan"
+        subtitle="Hygienic broilers, professional brooding, quality feeds and cash crops — serving Oyo State since 2016."
+      />
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-gold/20 blur-3xl" aria-hidden />
@@ -34,7 +40,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-5 lg:px-8 py-20 lg:py-28 grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-7 reveal">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-secondary px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary-deep">
-              <Sparkles size={14}/> Since 2016 · Ibadan, Nigeria
+              Since 2016 · Ibadan, Nigeria
             </span>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight">
               Premium <span className="text-gradient-emerald">Broiler Production</span>,
