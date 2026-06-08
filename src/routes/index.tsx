@@ -28,6 +28,11 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <SiteShell>
+      <PageBanner
+        eyebrow="YSJ Limited Broiler Farm"
+        title="Premium Poultry & Agro from Ibadan"
+        subtitle="Hygienic broilers, professional brooding, quality feeds and cash crops — serving Oyo State since 2016."
+      />
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-gold/20 blur-3xl" aria-hidden />
