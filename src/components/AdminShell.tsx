@@ -20,6 +20,7 @@ const nav: NavItem[] = [
   { to: "/admin/submissions", label: "Submissions", icon: Inbox, role: ["admin", "md", "supervisor"] },
   { to: "/admin/advisor", label: "AI Advisor", icon: Sparkles },
   { to: "/admin/staff", label: "Staff Roster", icon: Users, role: ["admin"] },
+  { to: "/admin/audit-logs", label: "Audit Logs", icon: ShieldCheck, role: ["admin"] },
 ];
 
 export function AdminShell({ children }: { children: ReactNode }) {
