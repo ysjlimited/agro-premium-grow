@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   LayoutDashboard, ClipboardList, CalendarRange, Inbox,
-  Users, Sparkles, LogOut, Menu, X, Bird, Layers, Package, FileBarChart2,
+  Users, Sparkles, LogOut, Menu, X, Bird, Layers, Package, FileBarChart2, ShieldCheck,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +20,7 @@ const nav: NavItem[] = [
   { to: "/admin/submissions", label: "Submissions", icon: Inbox, role: ["admin", "md", "supervisor"] },
   { to: "/admin/advisor", label: "AI Advisor", icon: Sparkles },
   { to: "/admin/staff", label: "Staff Roster", icon: Users, role: ["admin"] },
+  { to: "/admin/audit-logs", label: "Audit Logs", icon: ShieldCheck, role: ["admin"] },
 ];
 
 export function AdminShell({ children }: { children: ReactNode }) {

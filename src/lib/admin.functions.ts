@@ -531,6 +531,16 @@ export const adminResetStaffPassword = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.auth.admin.updateUserById(data.user_id, { password: data.new_password });
     if (error) throw new Error(error.message);
+
+    // Audit log entry for password reset
+    await supabaseAdmin.from("audit_logs").insert({
+      actor_id: context.userId,
+      action: "password_reset",
+      target_id: data.user_id,
+      target_type: "staff",
+      details: { reason: "Admin initiated password reset via Staff Roster" },
+    });
+
     return { ok: true };
   });
 
@@ -565,6 +575,22 @@ export const adminDeleteStaff = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin.auth.admin.deleteUser(data.user_id);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export const listAuditLogs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data: callerRoles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const isAdmin = (callerRoles ?? []).some((r) => r.role === "admin");
+    if (!isAdmin) throw new Error("Only admins can view audit logs.");
+    const { data, error } = await supabase
+      .from("audit_logs")
+      .select("id,actor_id,action,target_id,target_type,details,created_at")
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (error) throw new Error(error.message);
+    return data ?? [];
   });
 
 // ============================================================
