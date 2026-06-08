@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Truck, Leaf, Egg, Wheat, Star } from "lucide-react";
+import { ArrowRight, MessageCircle, ShieldCheck, Truck, Leaf, Egg, Wheat, Star } from "lucide-react";
+import { PageBanner } from "@/components/PageBanner";
 import { SiteShell } from "@/components/SiteShell";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import hero from "@/assets/hero.jpg.asset.json";
