@@ -577,6 +577,22 @@ export const adminDeleteStaff = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export const listAuditLogs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data: callerRoles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const isAdmin = (callerRoles ?? []).some((r) => r.role === "admin");
+    if (!isAdmin) throw new Error("Only admins can view audit logs.");
+    const { data, error } = await supabase
+      .from("audit_logs")
+      .select("id,actor_id,action,target_id,target_type,details,created_at")
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
 // ============================================================
 // ARRIVALS — quick increments
 // ============================================================
