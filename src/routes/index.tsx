@@ -35,7 +35,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-5 lg:px-8 py-20 lg:py-28 grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-7 reveal">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-secondary px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary-deep">
-              <Sparkles size={14}/> Since 2016 · Ibadan, Nigeria
+              Since 2016 · Ibadan, Nigeria
             </span>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight">
               Premium <span className="text-gradient-emerald">Broiler Production</span>,
