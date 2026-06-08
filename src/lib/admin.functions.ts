@@ -531,6 +531,16 @@ export const adminResetStaffPassword = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.auth.admin.updateUserById(data.user_id, { password: data.new_password });
     if (error) throw new Error(error.message);
+
+    // Audit log entry for password reset
+    await supabaseAdmin.from("audit_logs").insert({
+      actor_id: context.userId,
+      action: "password_reset",
+      target_id: data.user_id,
+      target_type: "staff",
+      details: { reason: "Admin initiated password reset via Staff Roster" },
+    });
+
     return { ok: true };
   });
 
